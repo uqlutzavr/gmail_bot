@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slack_bot
+    environment:
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+      - DEBUG_MODE=${DEBUG_MODE}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - gmail_bot
+
+networks:
+  gmail:
+    driver: bridge
