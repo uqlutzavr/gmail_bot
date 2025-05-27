@@ -13,5 +13,5 @@ services:
       - gmail_bot
 
 networks:
-  gmail:
+  gmail_bot:
     driver: bridge
