@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: slack_bot
+    container_name: gmail_bot
     environment:
       - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
       - DEBUG_MODE=${DEBUG_MODE}
