@@ -1,7 +1,6 @@
 import os.path
 import time
 import json
-
 import requests
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -53,7 +52,6 @@ class Gmail:
 
     def start_monitoring(self, max_retries=5, retry_delay=30, check_interval=5):
         retry_count = 0
-        print(max_retries, retry_delay, check_interval)
 
         while True:
             try:
@@ -108,9 +106,12 @@ class Gmail:
             headers = message['payload'].get('headers', [])
             subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'No Subject')
 
+            profile = self.service.users().getProfile(userId='me').execute()
+            email_address = profile.get('emailAddress')
+
             return {
                 'subject': subject,
-                'email_link': f'https://mail.google.com/mail/u/0/#inbox/{message_id}'
+                'email_link': f'https://mail.google.com/mail/u/0/?authuser={email_address}#inbox/{message_id}'
             }
         except Exception as e:
             logger.error(f"Error getting message details for {message_id}: {e}")
@@ -133,7 +134,6 @@ class Gmail:
             logger.error(f"Error in sending message to slack - {e}")
 
     def _monitoring_loop(self, check_interval=30):
-        print(check_interval)
         logger.info(f"Starting monitoring loop with {check_interval}s interval")
         already_sent = set()
         try:
